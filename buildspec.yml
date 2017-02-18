@@ -1,3 +1,4 @@
+# https://github.com/PalmStoneGames/kube-cert-manager/blob/master/buildspec.yml
 version: 0.1
 
 environment_variables:
@@ -7,6 +8,7 @@ environment_variables:
 phases:
   pre_build:
     commands:
+      - env
       - go get -u -v ./...
   build:
     commands:
