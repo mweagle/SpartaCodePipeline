@@ -1,0 +1,13 @@
+version: 0.1
+
+environment_variables:
+  plaintext:
+    key: "value"
+
+phases:
+  pre_build:
+    commands:
+      - go get -u -v ./...
+  build:
+    commands:
+      - go run main.go provision --level info --s3Bucket weagle --codePipeline SpartaCodePipeline.pipeline.zip
