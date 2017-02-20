@@ -10,7 +10,7 @@ phases:
     commands:
       - env
       - mkdir -pv $SRC_DIR
-      - cp -R . $SRC_DIR
+      - cp -R $PWD $SRC_DIR
       - cd $SRC_DIR && go get -u -v ./...
   build:
     commands:
