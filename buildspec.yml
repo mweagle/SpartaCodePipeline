@@ -3,7 +3,7 @@ version: 0.1
 
 environment_variables:
   plaintext:
-    SRC_DIR: "$GOPATH/src/github.com/mweagle/SpartaCodePipeline"
+    SRC_DIR: /go/src/github.com/mweagle/SpartaCodePipeline
 
 phases:
   pre_build:
