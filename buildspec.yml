@@ -9,6 +9,7 @@ phases:
   pre_build:
     commands:
       - env
+      - ls -laR
       - go get -u -v ./...
   build:
     commands:
