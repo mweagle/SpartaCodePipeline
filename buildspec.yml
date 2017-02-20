@@ -9,7 +9,7 @@ phases:
   pre_build:
     commands:
       - env
-      - mkdir -pv $SRC_DIR && cp -a . $_ && cd $_ && go get -v ./...
+      - mkdir -pv $SRC_DIR && cp -a . $SRC_DIR && cd $SRC_DIR && go get -v ./...
   build:
     commands:
       - cd $SRC_DIR && go run main.go provision --level info --s3Bucket weagle --codePipeline SpartaCodePipeline.pipeline.zip
