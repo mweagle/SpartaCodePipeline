@@ -3,14 +3,18 @@ version: 0.1
 
 environment_variables:
   plaintext:
-    key: "value"
+    SRC_DIR: "/$GOPATH/src/github.com/mweagle/SpartaCodePipeline"
 
 phases:
   pre_build:
     commands:
       - env
-      - ls -laR
-      - go get -u -v ./...
+      - mkdir -pv $SRC_DIR
+      - rsync -av --progress . $SRC_DIR --exclude .git
+      - cd $SRC_DIR && go get -u -v ./...
   build:
     commands:
-      - go run main.go provision --level info --s3Bucket weagle --codePipeline SpartaCodePipeline.pipeline.zip
+      - cd $SRC_DIR && go run main.go provision --level info --s3Bucket weagle --codePipeline SpartaCodePipeline.pipeline.zip
+
+
+
