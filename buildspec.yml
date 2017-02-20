@@ -10,11 +10,8 @@ phases:
     commands:
       - env
       - mkdir -pv $SRC_DIR
-      - rsync -av --progress . $SRC_DIR --exclude .git
+      - cp -R . $SRC_DIR
       - cd $SRC_DIR && go get -u -v ./...
   build:
     commands:
       - cd $SRC_DIR && go run main.go provision --level info --s3Bucket weagle --codePipeline SpartaCodePipeline.pipeline.zip
-
-
-
