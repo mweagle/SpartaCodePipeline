@@ -13,3 +13,6 @@ phases:
   build:
     commands:
       - cd $SRC_DIR && go run main.go provision --level info --s3Bucket weagle --codePipeline SpartaCodePipeline.pipeline.zip
+
+  artifacts:
+    ./.sparta/*
