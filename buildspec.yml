@@ -4,6 +4,7 @@ version: 0.1
 environment_variables:
   plaintext:
     SRC_DIR: /go/src/github.com/mweagle/SpartaCodePipeline
+    PIPELINE_PACKAGE: SpartaCodePipeline.zip
 
 phases:
   pre_build:
@@ -12,9 +13,8 @@ phases:
       - mkdir -pv $SRC_DIR && mv $PWD/* $SRC_DIR/ && cd $SRC_DIR && go get -v ./...
   build:
     commands:
-      - cd $SRC_DIR && go run main.go provision --level info --s3Bucket weagle --codePipeline SpartaCodePipeline.zip
+      - cd $SRC_DIR && go run main.go provision --level info --s3Bucket weagle --codePipeline $PIPELINE_PACKAGE
 
 artifacts:
-  base-directory: .sparta
   files:
-    - SpartaCodePipeline.zip
+    - $SRC_DIR/.sparta/$PIPELINE_PACKAGE
