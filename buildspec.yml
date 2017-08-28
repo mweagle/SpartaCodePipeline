@@ -12,7 +12,7 @@ phases:
       - mkdir -pv $SRC_DIR && mv $PWD/* $SRC_DIR/ && cd $SRC_DIR && go get -v ./...
   build:
     commands:
-      - cd $SRC_DIR && go run main.go provision --level info --s3Bucket weagle --codePipeline SpartaCodePipeline.pipeline.zip
+      - cd $SRC_DIR && go run main.go provision --level info --s3Bucket weagle --codePipeline SpartaCodePipeline.zip
 
   artifacts:
-    ./.sparta/*
+    ./.sparta/SpartaCodePipeline.zip
