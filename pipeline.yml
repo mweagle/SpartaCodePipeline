@@ -7,6 +7,19 @@ Parameters:
   PipelineName:
     Description: A name for pipeline
     Type: String
+  GitHubOAuthToken: 
+      Description: Create a token with 'repo' and 'admin:repo_hook' permissions here https://github.com/settings/tokens
+      Type: String
+  GitHubUser:
+      Description: GitHub username of the repository owner
+      Type: String
+  GitHubRepository:
+      Description: GitHub repository name that should be monitored for changes
+      Type: String
+  GitHubBranch:
+      Description: GitHub branch to monitored
+      Type: String
+      Default: master
   S3Bucket:
     Description: The name of the S3 bucket that contains the source artifact, which must be in the same region as this stack
     Type: String
@@ -46,6 +59,13 @@ Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
+          default: "GitHub Source Settings"
+        Parameters:
+          - GitHubOAuthToken
+          - GitHubUser
+          - GitHubRepository
+          - GitHubBranch
+      - Label:
           default: "CodePipeline Settings"
         Parameters:
           - PipelineName
@@ -66,6 +86,65 @@ Metadata:
           - ProdStackConfig
 
 Resources:
+  CodeBuild:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Name: !Join [ ":", [ !Ref ApplicationName, "Pipeline" ] ]
+      Description: Build the application
+      ServiceRole: !GetAtt CodeBuildRole.Arn
+      Artifacts:
+        Type: no_artifacts
+      Environment:
+        Type: linuxContainer
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/golang:1.7.3
+      Source:
+        Type: CODEPIPELINE
+      TimeoutInMinutes: 10
+
+  CodeBuildRole:
+    Type: AWS::IAM::Role
+    Properties: 
+        Path: /
+        RoleName: !Sub ${ApplicationName}-CodeBuild-${AWS::Region}
+        AssumeRolePolicyDocument: |
+                {
+                    "Statement": [{
+                        "Action": "sts:AssumeRole",
+                        "Effect": "Allow",
+                        "Principal": { 
+                            "Service": "codebuild.amazonaws.com" 
+                        }
+                    }]
+                }
+        Policies: 
+            - PolicyName: !Sub ${ApplicationName}-CodeBuild-${AWS::Region}
+              PolicyDocument: !Sub |      
+                    {
+                        "Statement": [              
+                            {
+                                "Effect": "Allow",
+                                "Resource": [ "*" ],
+                                "Action": [
+                                    "logs:CreateLogGroup",
+                                    "logs:CreateLogStream",
+                                    "logs:PutLogEvents"
+                                ]
+                            },
+                            {
+                                "Effect": "Allow",
+                                "Resource": [
+                                    "arn:aws:s3:::${S3Bucket}/*"
+                                ],
+                                "Action": [
+                                    "s3:GetObject",
+                                    "s3:GetObjectVersion",
+                                    "s3:PutObject"
+                                ]
+                            }
+                        ]
+                    }
+# CodePipeline
   ArtifactStoreBucket:
     Type: AWS::S3::Bucket
     Properties:
@@ -89,6 +168,36 @@ Resources:
       Name: !Ref 'PipelineName'
       RoleArn: !GetAtt [PipelineRole, Arn]
       Stages:
+        - Name: Source
+          Actions:
+            - Name: GitHub
+                ActionTypeId:
+                    Category: Source
+                    Owner: ThirdParty
+                    Version: 1
+                    Provider: GitHub
+                OutputArtifacts:
+                    -  Name: Source
+                Configuration:
+                    Owner: !Ref GitHubUser
+                    Repo: !Ref GitHubRepository
+                    Branch: !Ref GitHubBranch
+                    OAuthToken: !Ref GitHubOAuthToken
+      - Name: Build
+          Actions:
+              - Name: CodeBuild
+                InputArtifacts:
+                    - Name: Source
+                ActionTypeId: 
+                    Category: Build
+                    Owner: AWS
+                    Version: 1
+                    Provider: CodeBuild
+                OutputArtifacts:
+                    - Name: Built
+                Configuration: 
+                    ProjectName: !Ref CodeBuild
+
         - Name: S3Source
           Actions:
             - Name: TemplateSource

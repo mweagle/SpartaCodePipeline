@@ -10,7 +10,8 @@ phases:
   pre_build:
     commands:
       - env
-      - mkdir -pv $SRC_DIR && mv $PWD/* $SRC_DIR/ && cd $SRC_DIR && go get -v ./...
+      - go get -u github.com/golang/dep/cmd/dep
+      - mkdir -pv $SRC_DIR && mv $PWD/* $SRC_DIR/ && cd $SRC_DIR && dep ensure -v
   build:
     commands:
       - cd $SRC_DIR && go run main.go provision --level info --s3Bucket weagle --codePipeline $PIPELINE_PACKAGE
