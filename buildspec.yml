@@ -15,9 +15,6 @@ phases:
   build:
     commands:
       - cd $SRC_DIR && go run main.go provision --level info --s3Bucket weagle --codePipeline $PIPELINE_PACKAGE
-  post_build:
-    commands:
-      - ls -laR $SRC_DIR
 
 artifacts:
   files:
