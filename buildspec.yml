@@ -17,5 +17,7 @@ phases:
       - cd $SRC_DIR && go run main.go provision --level info --s3Bucket weagle --codePipeline $PIPELINE_PACKAGE
 
 artifacts:
+  base-directory: $SRC_DIR/.sparta
+  discard-paths: yes
   files:
-    - $SRC_DIR/.sparta/$PIPELINE_PACKAGE
+    - $PIPELINE_PACKAGE
