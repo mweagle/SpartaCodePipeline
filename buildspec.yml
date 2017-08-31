@@ -16,6 +16,12 @@ phases:
     commands:
       - cd $SRC_DIR && go run main.go provision --level info --s3Bucket weagle --codePipeline $PIPELINE_PACKAGE
 
+  post_build:
+    commands:
+      # Handle CodeBuild: http://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html#build-spec-ref-syntax
+      - unzip $SRC_DIR/.sparta/$PIPELINE_PACKAGE -d $SRC_DIR/.sparta
+      - ls $SRC_DIR/.sparta
+
 artifacts:
   base-directory: $SRC_DIR/.sparta
   discard-paths: yes
