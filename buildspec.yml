@@ -28,4 +28,4 @@ artifacts:
   base-directory: $SRC_DIR/.sparta
   discard-paths: yes
   files:
-    - $PIPELINE_PACKAGE
+    - '**/*'
