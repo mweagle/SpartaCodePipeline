@@ -27,4 +27,4 @@
 
 [[constraint]]
   name = "github.com/mweagle/Sparta"
-  branch = "mweagle/0.13.3"
+  branch = "mweagle/0.20.0"
