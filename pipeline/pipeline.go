@@ -590,7 +590,7 @@ func Provision(provisionOptions *ProvisionOptions) error {
 			return stackResultErr
 		}
 		logger.WithFields(logrus.Fields{
-			"StackId": stackResult.StackId,
+			"StackId": *stackResult.StackId,
 		}).Info("Pipeline provisioned")
 	}
 	// Great we have a pipeline!
