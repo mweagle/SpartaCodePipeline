@@ -143,7 +143,9 @@ func Provision(provisionOptions *ProvisionOptions) error {
 		Type: "String",
 		Description: fmt.Sprintf("Test %s service stack",
 			sparta.OptionsGlobal.ServiceName),
-		Default: fmt.Sprintf("Test-%s", sparta.OptionsGlobal.ServiceName),
+		Default: fmt.Sprintf("Test-%s-%s",
+			sparta.OptionsGlobal.ServiceName,
+			ghBranch),
 	}
 	cfTemplate.Parameters["TestStackConfig"] = &gocf.Parameter{
 		Type: "String",
@@ -156,7 +158,9 @@ func Provision(provisionOptions *ProvisionOptions) error {
 		Type: "String",
 		Description: fmt.Sprintf("Production %s service stack",
 			sparta.OptionsGlobal.ServiceName),
-		Default: fmt.Sprintf("Prod-%s", sparta.OptionsGlobal.ServiceName),
+		Default: fmt.Sprintf("Prod-%s-%s",
+			sparta.OptionsGlobal.ServiceName,
+			ghBranch),
 	}
 	cfTemplate.Parameters["ProdStackConfig"] = &gocf.Parameter{
 		Type: "String",

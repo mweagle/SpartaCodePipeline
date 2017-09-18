@@ -6,7 +6,6 @@ import (
 	"os"
 
 	sparta "github.com/mweagle/Sparta"
-	spartaCF "github.com/mweagle/Sparta/aws/cloudformation"
 	"github.com/mweagle/SpartaCodePipeline/pipeline"
 	"github.com/spf13/cobra"
 	"gopkg.in/go-playground/validator.v9"
@@ -72,9 +71,8 @@ func main() {
 		sparta.IAMRoleDefinition{})
 	var lambdaFunctions []*sparta.LambdaAWSInfo
 	lambdaFunctions = append(lambdaFunctions, lambdaFn)
-	stackName := spartaCF.UserScopedStackName("SpartaCodePipeline")
-	err := sparta.Main(stackName,
-		fmt.Sprintf("Test CodePipeline deployment"),
+	err := sparta.Main("SpartaCodePipeline",
+		fmt.Sprintf("SpartaCodePipeline CodePipeline example"),
 		lambdaFunctions,
 		nil,
 		nil)
