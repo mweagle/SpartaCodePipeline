@@ -29,6 +29,9 @@ explore:
 provision:
 	go run main.go provision --level info --s3Bucket $(S3_BUCKET)
 
+provisionCodePipelinePackage:
+	go run main.go provision --level info --s3Bucket $(S3_BUCKET) --noop --codePipelinePackage NoopPipeline
+
 provisionShort: generate vet
 	go run main.go provision -s weagle --noop -l info
 
@@ -37,3 +40,6 @@ describe: generate vet
 
 provisionPipeline: generate vet
 	go run main.go --level info provisionPipeline --pipeline "SpartaPipeline" --repo https://github.com/mweagle/SpartaCodePipeline --oauth $(GITHUB_AUTH_TOKEN) --s3Bucket $(S3_BUCKET)
+
+provisionPipelineNoop: generate vet
+	go run main.go --level info provisionPipeline --pipeline "SpartaPipeline" --repo https://github.com/mweagle/SpartaCodePipeline --oauth $(GITHUB_AUTH_TOKEN) --s3Bucket $(S3_BUCKET) --noop
