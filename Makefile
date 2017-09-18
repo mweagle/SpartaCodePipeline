@@ -35,5 +35,5 @@ provisionShort: generate vet
 describe: generate vet
 	go run main.go --level info describe --out ./graph.html
 
-trigger: generate vet
-	go run main.go provision --level info --s3Bucket weagle --codePipeline SpartaCodePipeline.pipeline.zip
+provisionPipeline: generate vet
+	go run main.go --level info provisionPipeline --pipeline "SpartaPipeline" --repo https://github.com/mweagle/SpartaCodePipeline --oauth $(GITHUB_AUTH_TOKEN) --s3Bucket $(S3_BUCKET)
