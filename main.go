@@ -1,14 +1,18 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"os"
 
-	"github.com/Sirupsen/logrus"
 	sparta "github.com/mweagle/Sparta"
+	"github.com/mweagle/SpartaCodePipeline/pipeline"
+	"github.com/spf13/cobra"
+	"gopkg.in/go-playground/validator.v9"
 )
+
+// PipelineName is the name of the stack to provision that supports the pipeline
+var pipelineOptions pipeline.ProvisionOptions
 
 func init() {
 	sparta.RegisterCodePipelineEnvironment("test", map[string]string{
@@ -19,12 +23,8 @@ func init() {
 	})
 }
 
-// Standard AWS λ function
-func helloWorld(event *json.RawMessage,
-	context *sparta.LambdaContext,
-	w http.ResponseWriter,
-	logger *logrus.Logger) {
-
+// Standard http.HandlerFunc() that will be run as a lambda function
+func helloSpartaWorld(w http.ResponseWriter, r *http.Request) {
 	messageText := os.Getenv("MESSAGE")
 	if "" == messageText {
 		messageText = "$MESSAGE not defined"
@@ -33,13 +33,42 @@ func helloWorld(event *json.RawMessage,
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+// Add a command to provision a CI pipeline
+var pipelineProvisionCommand = &cobra.Command{
+	Use:   "provisionPipeline",
+	Short: "Provision a CI/CD pipeline for this stack",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		validate := validator.New()
+		cliErrors := validate.Struct(&pipelineOptions)
+		if cliErrors != nil {
+			return cliErrors
+		}
+		return pipeline.Provision(&pipelineOptions)
+	},
+}
+
+////////////////////////////////////////////////////////////////////////////////
 // Main
 func main() {
+	// Register the provisionPipeline command
+	pipelineProvisionCommand.PersistentFlags().StringVarP(&pipelineOptions.PipelineName, "pipeline", "p", "", "pipeline name")
+	pipelineProvisionCommand.PersistentFlags().StringVarP(&pipelineOptions.GithubRepo, "repo", "r", "", "GitHub Repo URL")
+	pipelineProvisionCommand.PersistentFlags().StringVarP(&pipelineOptions.GithubOAuthToken, "oauth", "o", "", "GitHub OAuth token")
+	pipelineProvisionCommand.PersistentFlags().StringVarP(&pipelineOptions.S3Bucket,
+		"s3Bucket",
+		"s",
+		"",
+		"S3 Bucket to use for Lambda source")
+	pipelineProvisionCommand.PersistentFlags().BoolVarP(&pipelineOptions.Noop, "noop",
+		"n",
+		false,
+		"Dry-run behavior only (do not perform mutations)")
+	sparta.CommandLineOptions.Root.AddCommand(pipelineProvisionCommand)
 
-	lambdaFn := sparta.NewLambda(sparta.IAMRoleDefinition{},
-		helloWorld,
-		nil)
-
+	// Normal execution
+	lambdaFn := sparta.HandleAWSLambda("CodePipeline HelloWorld Message",
+		http.HandlerFunc(helloSpartaWorld),
+		sparta.IAMRoleDefinition{})
 	var lambdaFunctions []*sparta.LambdaAWSInfo
 	lambdaFunctions = append(lambdaFunctions, lambdaFn)
 	err := sparta.Main("SpartaCodePipeline",
@@ -47,6 +76,7 @@ func main() {
 		lambdaFunctions,
 		nil,
 		nil)
+
 	if err != nil {
 		os.Exit(1)
 	}
