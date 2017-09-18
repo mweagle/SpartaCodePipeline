@@ -6,6 +6,8 @@ import (
 	"net/url"
 	"os"
 	"path/filepath"
+	"regexp"
+	"runtime"
 	"strings"
 	"time"
 
@@ -326,6 +328,14 @@ func Provision(provisionOptions *ProvisionOptions) error {
 		  \___\___/\__,_\___|___/\_,_|_|_\__,_|
 	*/
 	//////////////////////////////////////////////////////////////////////////////
+	// Get the golang version from the output:
+	runtimeVersion := runtime.Version()
+	golangVersionRE := regexp.MustCompile(`go(\d+\.\d+(\.\d+)?)`)
+	matches := golangVersionRE.FindStringSubmatch(runtimeVersion)
+	if len(matches) < 2 {
+		return fmt.Errorf("Unable to determine Go version from runtime: %s", runtimeVersion)
+	}
+
 	codeBuildProject := &gocf.CodeBuildProject{
 		Name:             gocf.String(fmt.Sprintf("CodeBuild-%s", sparta.OptionsGlobal.ServiceName)),
 		Description:      gocf.String("Builds and deploys the service"),
@@ -342,7 +352,7 @@ func Provision(provisionOptions *ProvisionOptions) error {
 		},
 		Environment: &gocf.CodeBuildProjectEnvironment{
 			Type:           gocf.String("LINUX_CONTAINER"),
-			Image:          gocf.String("golang:1.8.3"),
+			Image:          gocf.String(fmt.Sprintf("golang:%s", matches[1])),
 			ComputeType:    gocf.String("BUILD_GENERAL1_SMALL"),
 			PrivilegedMode: gocf.Bool(false),
 		},
