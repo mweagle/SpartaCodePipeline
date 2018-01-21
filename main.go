@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"net/http"
 	"os"
 
 	sparta "github.com/mweagle/Sparta"
@@ -23,13 +22,13 @@ func init() {
 	})
 }
 
-// Standard http.HandlerFunc() that will be run as a lambda function
-func helloSpartaWorld(w http.ResponseWriter, r *http.Request) {
+// Standard AWS Lambda function
+func helloSpartaWorld() (string, error) {
 	messageText := os.Getenv("MESSAGE")
 	if "" == messageText {
 		messageText = "$MESSAGE not defined"
 	}
-	fmt.Fprint(w, messageText)
+	return messageText, nil
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -67,7 +66,7 @@ func main() {
 
 	// Normal execution
 	lambdaFn := sparta.HandleAWSLambda("CodePipeline HelloWorld Message",
-		http.HandlerFunc(helloSpartaWorld),
+		helloSpartaWorld,
 		sparta.IAMRoleDefinition{})
 	var lambdaFunctions []*sparta.LambdaAWSInfo
 	lambdaFunctions = append(lambdaFunctions, lambdaFn)

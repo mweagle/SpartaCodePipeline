@@ -11,14 +11,16 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Sirupsen/logrus"
 	"github.com/mweagle/Sparta"
 	spartaAWS "github.com/mweagle/Sparta/aws"
 	spartaCF "github.com/mweagle/Sparta/aws/cloudformation"
 	spartaIAM "github.com/mweagle/Sparta/aws/iam"
 	spartaS3 "github.com/mweagle/Sparta/aws/s3"
 	gocf "github.com/mweagle/go-cloudformation"
+	"github.com/sirupsen/logrus"
 )
+
+var convergeDivider = strings.Repeat("-", 62)
 
 // ProvisionOptions are the command line options necessary to provision
 // the CloudFormation backed CodeBuild pipeline for this project
@@ -588,13 +590,13 @@ func Provision(provisionOptions *ProvisionOptions) error {
 		pipelineStackName := fmt.Sprintf("%s-%s",
 			sparta.OptionsGlobal.ServiceName,
 			provisionOptions.PipelineName)
-
 		stackResult, stackResultErr := spartaCF.ConvergeStackState(pipelineStackName,
 			cfTemplate,
 			uploadLocation,
 			nil,
 			time.Now(),
 			awsSession,
+			convergeDivider,
 			logger)
 		if nil != stackResultErr {
 			return stackResultErr
