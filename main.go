@@ -15,12 +15,12 @@ var pipelineOptions pipeline.ProvisionOptions
 
 func init() {
 	sparta.RegisterCodePipelineEnvironment("test", map[string]string{
-		"MESSAGE":          "Hello Test!",
-		"ENVIRONMENT_NAME": "test",
+		"MESSAGE":     "Hello Test!",
+		"ENVIRONMENT": "test",
 	})
 	sparta.RegisterCodePipelineEnvironment("production", map[string]string{
-		"MESSAGE":          "Hello Production!",
-		"ENVIRONMENT_NAME": "prod",
+		"MESSAGE":     "Hello Production!",
+		"ENVIRONMENT": "prod",
 	})
 }
 
@@ -67,7 +67,7 @@ func main() {
 	sparta.CommandLineOptions.Root.AddCommand(pipelineProvisionCommand)
 
 	// Normal execution
-	lambdaFn := sparta.HandleAWSLambda(fmt.Sprintf("HelloWorld-%s", os.Getenv("ENVIRONMENT_NAME")),
+	lambdaFn := sparta.HandleAWSLambda(fmt.Sprintf("HelloWorld-%s", os.Getenv("ENVIRONMENT")),
 		helloSpartaWorld,
 		sparta.IAMRoleDefinition{})
 	var lambdaFunctions []*sparta.LambdaAWSInfo
