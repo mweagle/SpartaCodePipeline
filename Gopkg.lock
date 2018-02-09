@@ -16,14 +16,20 @@
 [[projects]]
   name = "github.com/aws/aws-sdk-go"
   packages = ["aws","aws/awserr","aws/awsutil","aws/client","aws/client/metadata","aws/corehandlers","aws/credentials","aws/credentials/ec2rolecreds","aws/credentials/endpointcreds","aws/credentials/stscreds","aws/defaults","aws/ec2metadata","aws/endpoints","aws/request","aws/session","aws/signer/v4","internal/shareddefaults","private/protocol","private/protocol/json/jsonutil","private/protocol/jsonrpc","private/protocol/query","private/protocol/query/queryutil","private/protocol/rest","private/protocol/restjson","private/protocol/restxml","private/protocol/xml/xmlutil","service/apigateway","service/cloudformation","service/cloudwatchlogs","service/iam","service/lambda","service/s3","service/s3/s3iface","service/s3/s3manager","service/ses","service/sns","service/sts"]
-  revision = "1b176c5c6b57adb03bb982c21930e708ebca5a77"
-  version = "v1.12.70"
+  revision = "de28909e9837364f0368d94ddcba085c57af3c12"
+  version = "v1.12.73"
 
 [[projects]]
   name = "github.com/briandowns/spinner"
   packages = ["."]
   revision = "48dbb65d7bd5c74ab50d53d04c949f20e3d14944"
   version = "1.0"
+
+[[projects]]
+  name = "github.com/deckarep/golang-set"
+  packages = ["."]
+  revision = "1d4478f51bed434f1dadf96dcd9b43aabac66795"
+  version = "v1.7"
 
 [[projects]]
   branch = "master"
@@ -59,7 +65,7 @@
   branch = "master"
   name = "github.com/google/pprof"
   packages = ["driver","internal/binutils","internal/driver","internal/elfexec","internal/graph","internal/measurement","internal/plugin","internal/report","internal/symbolizer","internal/symbolz","profile","third_party/d3","third_party/d3flamegraph","third_party/d3tip","third_party/svgpan"]
-  revision = "f6c7e790d074a2fb3cafc1b31711bdf2edeae6c0"
+  revision = "aed84736a01cb76abc2fdae7ecb961c1171a96cd"
 
 [[projects]]
   branch = "master"
@@ -97,16 +103,28 @@
   revision = "9520e82c474b0a04dd04f8a40959027271bab992"
 
 [[projects]]
+  branch = "mweagle/1.0.2"
   name = "github.com/mweagle/Sparta"
   packages = [".","aws","aws/cloudformation","aws/cloudformation/resources","aws/iam","aws/s3","zip"]
-  revision = "5fd68752aed7fe076cea05e6bbe2ef72c48f047b"
-  version = "1.0.1"
+  revision = "ba16ec3fc54f5be4d3ffc0f0ee26779c1fde18c1"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/mweagle/go-cloudcondenser"
+  packages = ["."]
+  revision = "e1ad78f4b7808efe04dcfb8813d55cb64f673f13"
 
 [[projects]]
   branch = "master"
   name = "github.com/mweagle/go-cloudformation"
   packages = ["."]
   revision = "397558cba61b0a45fb12959177cbbbb4f91b4edb"
+
+[[projects]]
+  name = "github.com/pkg/errors"
+  packages = ["."]
+  revision = "645ef00459ed84a119197bfb8d8205042c6df63d"
+  version = "v0.8.0"
 
 [[projects]]
   name = "github.com/sirupsen/logrus"
@@ -136,13 +154,13 @@
   branch = "master"
   name = "golang.org/x/crypto"
   packages = ["ssh/terminal"]
-  revision = "1875d0a70c90e57f11972aefd42276df65e895b9"
+  revision = "5119cf507ed5294cc409c092980c7497ee5d6fd2"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix","windows"]
-  revision = "3dbebcf8efb6a5011a60c2b4591c1022a759af8a"
+  revision = "37707fdb30a5b38865cfb95e5aab41707daec7fd"
 
 [[projects]]
   name = "gopkg.in/AlecAivazis/survey.v1"
@@ -153,12 +171,12 @@
 [[projects]]
   name = "gopkg.in/go-playground/validator.v9"
   packages = ["."]
-  revision = "48a433ba4bcadc5be9aa16d4bdcb383d3f57a741"
-  version = "v9.9.3"
+  revision = "3620d3c0694119b61c72071ff5a05a976e97b05a"
+  version = "v9.9.4"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "52ddc8df97108b3d18bbf6426a6d692236c8423ed04479a1069162ec6c7d7045"
+  inputs-digest = "73e0b526f6eb962dc221366d78560fcadeb3a2da090671878b5a41492608a4cc"
   solver-name = "gps-cdcl"
   solver-version = 1

@@ -23,7 +23,7 @@
 
 [[constraint]]
   name = "github.com/mweagle/Sparta"
-  version = "1.0.1"
+  branch = "mweagle/1.0.2"
 
 [[constraint]]
   branch = "master"
@@ -39,4 +39,4 @@
 
 [[constraint]]
   name = "gopkg.in/go-playground/validator.v9"
-  version = "9.9.3"
+  version = "9.9.4"
