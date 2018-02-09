@@ -9,7 +9,11 @@ See the [Medium Post](https://medium.com/@mweagle/serverless-serverfull-and-weav
 1. Provision the pipeline:
 
 ```
-go run main.go provisionPipeline --pipeline MySpartaPipelineName --repo https://github.com/mweagle/SpartaCodePipeline --oauth $GITHUB_AUTH_TOKEN --s3Bucket $MY_S3_BUCKET
+go run main.go provisionPipeline \
+  --pipeline MySpartaPipelineName \
+  --repo https://github.com/mweagle/SpartaCodePipeline \
+  --oauth $GITHUB_AUTH_TOKEN \
+  --s3Bucket $MY_S3_BUCKET
 ```
 
 2. Visit the AWS console & manage the build, approval workflow
