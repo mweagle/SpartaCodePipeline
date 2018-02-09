@@ -67,7 +67,7 @@ func main() {
 	sparta.CommandLineOptions.Root.AddCommand(pipelineProvisionCommand)
 
 	// Normal execution
-	lambdaFn := sparta.HandleAWSLambda(fmt.Sprintf("HelloWorld-%s", os.Getenv("ENVIRONMENT")),
+	lambdaFn := sparta.HandleAWSLambda("HelloWorld",
 		helloSpartaWorld,
 		sparta.IAMRoleDefinition{})
 	var lambdaFunctions []*sparta.LambdaAWSInfo
